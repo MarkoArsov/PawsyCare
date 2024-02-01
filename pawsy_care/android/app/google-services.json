@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "977660744313",
+    "project_id": "pawsycare",
+    "storage_bucket": "pawsycare.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977660744313:android:d29269e339732f17733aa8",
+        "android_client_info": {
+          "package_name": "com.example.pawsy_care"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWPJ3YKZMAOEsmjCUAtYdeXCaoP65W8hQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
