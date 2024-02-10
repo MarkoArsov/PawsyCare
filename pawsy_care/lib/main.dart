@@ -1,9 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pawsy_care/screens/auth_screen.dart';
-import 'package:pawsy_care/screens/pets/pet_list_screen.dart';
-import 'package:pawsy_care/screens/role_select_screen.dart';
-import 'package:pawsy_care/screens/services/service_list_screen.dart';
+import 'package:pawsy_care/screens/pet-owner/book_services_screen.dart';
+import 'package:pawsy_care/screens/pet-owner/pet_list_screen.dart';
+import 'package:pawsy_care/screens/pet-owner/pet_owner_calendar_screen.dart';
+import 'package:pawsy_care/screens/service-provider/service_list_screen.dart';
+import 'package:pawsy_care/screens/service-provider/service_provider_calendar_screen.dart';
+import 'package:pawsy_care/screens/shared/auth_screen.dart';
+import 'package:pawsy_care/screens/shared/role_select_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -24,7 +27,11 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const AuthScreen(isLogin: false),
         '/role': (context) => const RoleScreen(),
         '/service-list': (context) => const ServiceListScreen(),
+        '/service-provider-calendar': (context) =>
+            const ServiceProviderCalendarScreen(),
         '/pet-list': (context) => const PetListScreen(),
+        '/pet-owner-calendar': (context) => const PetOwnerCalendarScreen(),
+        '/book-services': (context) => const BookServicesScreen()
       },
     );
   }

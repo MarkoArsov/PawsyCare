@@ -63,6 +63,7 @@ class CreateServiceWidgetState extends State<CreateServiceWidget> {
             ElevatedButton(
               onPressed: () {
                 Service service = Service(
+                  userId: '',
                   name: nameController.text,
                   description: descriptionController.text,
                   price: double.parse(priceController.text),

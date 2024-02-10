@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/pet.dart';
 
 class CreatePetWidget extends StatefulWidget {
@@ -17,8 +18,7 @@ class CreatePetWidgetState extends State<CreatePetWidget> {
   final TextEditingController ageController = TextEditingController();
   final TextEditingController aboutController = TextEditingController();
 
-  DateTime date = DateTime.now();
-  TimeOfDay time = TimeOfDay.now();
+  final FirestoreService _firestoreService = FirestoreService();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class CreatePetWidgetState extends State<CreatePetWidget> {
                 return null;
               },
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 0),
             DropdownButtonFormField(
               value: _selectedPetType,
               items: PetType.values.map((type) {
@@ -56,7 +56,7 @@ class CreatePetWidgetState extends State<CreatePetWidget> {
               },
               decoration: const InputDecoration(labelText: 'Type'),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 0),
             TextFormField(
               controller: breedController,
               decoration: const InputDecoration(labelText: 'Breed'),
@@ -67,7 +67,7 @@ class CreatePetWidgetState extends State<CreatePetWidget> {
                 return null;
               },
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 0),
             TextFormField(
               controller: ageController,
               keyboardType: TextInputType.number,
@@ -79,7 +79,7 @@ class CreatePetWidgetState extends State<CreatePetWidget> {
                 return null;
               },
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 0),
             TextFormField(
               controller: aboutController,
               decoration: const InputDecoration(labelText: 'About your pet'),
@@ -87,6 +87,7 @@ class CreatePetWidgetState extends State<CreatePetWidget> {
             ElevatedButton(
               onPressed: () {
                 Pet pet = Pet(
+                  userId: _firestoreService.getCurrentUserID(),
                   name: nameController.text,
                   type: _selectedPetType,
                   breed: breedController.text,

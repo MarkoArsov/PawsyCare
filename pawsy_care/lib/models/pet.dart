@@ -1,6 +1,7 @@
 enum PetType { type, cat, dog }
 
 class Pet {
+  String userId;
   String name;
   PetType type;
   String breed;
@@ -8,6 +9,7 @@ class Pet {
   String about;
 
   Pet({
+    required this.userId,
     required this.name,
     required this.type,
     required this.breed,

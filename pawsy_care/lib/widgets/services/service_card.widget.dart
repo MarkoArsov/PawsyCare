@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/models/service.dart';
 
-class ServiceWidget extends StatelessWidget {
+class ServiceCardWidget extends StatelessWidget {
   final Service service;
 
-  const ServiceWidget({super.key, required this.service});
+  const ServiceCardWidget({super.key, required this.service});
 
   @override
   Widget build(BuildContext context) {
@@ -12,15 +12,15 @@ class ServiceWidget extends StatelessWidget {
       elevation: 3,
       margin: const EdgeInsets.all(10),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Service Name: ${service.name}",
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              service.name,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
-            Text("Description: ${service.description}"),
+            Text(service.description, style: const TextStyle(fontSize: 15)),
             Text("Price: \$${service.price.toStringAsFixed(2)}"),
           ],
         ),
