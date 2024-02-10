@@ -13,6 +13,7 @@ dependencies:
   firebase_core: ^2.25.4
   firebase_auth: ^4.0.0
   cloud_firestore: ^4.15.4
+  syncfusion_flutter_calendar: ^24.2.3
 
 dev_dependencies:
   flutter_test:
