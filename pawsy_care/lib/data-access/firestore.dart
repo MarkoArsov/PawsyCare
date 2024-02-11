@@ -32,6 +32,7 @@ class FirestoreService {
       'type': pet.type.toString(),
       'breed': pet.breed,
       'age': pet.age,
+      'about': pet.about,
     });
   }
 
