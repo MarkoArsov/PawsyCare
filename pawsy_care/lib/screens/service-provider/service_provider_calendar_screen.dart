@@ -34,6 +34,9 @@ class ServiceProviderCalendarScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pawsy Care'),
+      ),
       body: SfCalendar(
         view: CalendarView.month,
         dataSource: _getCalendarData(),

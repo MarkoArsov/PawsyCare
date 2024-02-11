@@ -14,6 +14,12 @@ class FirestoreService {
   final CollectionReference services =
       FirebaseFirestore.instance.collection('services');
 
+  final CollectionReference serviceProviders =
+      FirebaseFirestore.instance.collection('serviceProviders');
+
+  final CollectionReference petOwners =
+      FirebaseFirestore.instance.collection('petOwners');
+
   // GET current user ID
   String getCurrentUserID() {
     User? user = FirebaseAuth.instance.currentUser;
@@ -22,6 +28,28 @@ class FirestoreService {
     } else {
       return '';
     }
+  }
+
+  Future<bool> petOwnerExists(String userId) async {
+    final QuerySnapshot query =
+        await petOwners.where('userId', isEqualTo: userId).get();
+
+    return query.docs.isNotEmpty;
+  }
+
+  Future<bool> serviceProviderExists(String userId) async {
+    final QuerySnapshot query =
+        await serviceProviders.where('userId', isEqualTo: userId).get();
+
+    return query.docs.isNotEmpty;
+  }
+
+  Future<void> addPetOwner(String userId) {
+    return petOwners.add({'userId': userId});
+  }
+
+  Future<void> addServiceProvider(String userId) {
+    return serviceProviders.add({'userId': userId});
   }
 
   // CREATE pet
@@ -145,7 +173,9 @@ class FirestoreService {
     QuerySnapshot querySnapshot =
         await bookings.where('petUserId', isEqualTo: userId).get();
 
-    return _getBookingsFromSnapshot(querySnapshot);
+    List<Future<Booking>> futureBookings =
+        _getBookingsFromSnapshot(querySnapshot);
+    return Future.wait(futureBookings);
   }
 
   // GET bookings by service user
@@ -153,16 +183,34 @@ class FirestoreService {
     QuerySnapshot querySnapshot =
         await bookings.where('serviceUserId', isEqualTo: userId).get();
 
-    return _getBookingsFromSnapshot(querySnapshot);
+    List<Future<Booking>> futureBookings =
+        _getBookingsFromSnapshot(querySnapshot);
+    return Future.wait(futureBookings);
   }
 
   // Helper function to convert QuerySnapshot to List of Bookings
-  List<Booking> _getBookingsFromSnapshot(QuerySnapshot querySnapshot) {
-    return querySnapshot.docs.map((doc) {
+  List<Future<Booking>> _getBookingsFromSnapshot(QuerySnapshot querySnapshot) {
+    return querySnapshot.docs.map((doc) async {
+      DocumentSnapshot petDoc = await doc['pet'].get();
+      DocumentSnapshot serviceDoc = await doc['service'].get();
+
       return Booking(
-        pet: doc['pet'],
-        service: doc['service'],
-        date: doc['date'],
+        pet: Pet(
+          userId: petDoc['userId'],
+          name: petDoc['name'],
+          type: PetType.values
+              .firstWhere((type) => type.toString() == petDoc['type']),
+          breed: petDoc['breed'],
+          age: petDoc['age'],
+          about: petDoc['about'],
+        ),
+        service: Service(
+          userId: serviceDoc['userId'],
+          name: serviceDoc['name'],
+          description: serviceDoc['description'],
+          price: serviceDoc['price'],
+        ),
+        date: doc['date'].toDate(),
       );
     }).toList();
   }

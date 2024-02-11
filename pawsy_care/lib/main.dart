@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/screens/pet-owner/book_services_screen.dart';
+import 'package:pawsy_care/screens/pet-owner/create_pet_screen.dart';
 import 'package:pawsy_care/screens/pet-owner/pet_list_screen.dart';
 import 'package:pawsy_care/screens/pet-owner/pet_owner_calendar_screen.dart';
 import 'package:pawsy_care/screens/service-provider/service_list_screen.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/service-provider-calendar': (context) =>
             const ServiceProviderCalendarScreen(),
         '/pet-list': (context) => const PetListScreen(),
+        '/create-pet': (context) => const CreatePetScreen(),
         '/pet-owner-calendar': (context) => const PetOwnerCalendarScreen(),
         '/book-services': (context) => const BookServicesScreen()
       },

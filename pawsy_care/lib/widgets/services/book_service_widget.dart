@@ -1,115 +1,125 @@
-// import 'package:flutter/material.dart';
-// import 'package:pawsy_care/data-access/firestore.dart';
-// import 'package:pawsy_care/models/booking.dart';
-// import 'package:pawsy_care/models/pet.dart';
-// import 'package:pawsy_care/models/service.dart';
+import 'package:flutter/material.dart';
+import 'package:pawsy_care/models/booking.dart';
+import 'package:pawsy_care/models/pet.dart';
+import 'package:pawsy_care/models/service.dart';
 
-// class BookServiceWidget extends StatefulWidget {
-//   final List<Pet> pets;
-//   final Service service;
-//   final Function(Booking) addBooking;
+class BookServiceWidget extends StatefulWidget {
+  final List<Pet> pets;
+  final Service service;
+  final Function(Booking) addBooking;
 
-//   const BookServiceWidget(
-//       {required this.pets,
-//       required this.service,
-//       required this.addBooking,
-//       super.key});
+  const BookServiceWidget(
+      {required this.pets,
+      required this.service,
+      required this.addBooking,
+      super.key});
 
-//   @override
-//   BookServiceWidgetState createState() => BookServiceWidgetState();
-// }
+  @override
+  BookServiceWidgetState createState() => BookServiceWidgetState();
+}
 
-// class BookServiceWidgetState extends State<BookServiceWidget> {
-//   final TextEditingController nameController = TextEditingController();
-//   PetType _selectedPetType = PetType.type;
-//   final TextEditingController breedController = TextEditingController();
-//   final TextEditingController ageController = TextEditingController();
-//   final TextEditingController aboutController = TextEditingController();
+class BookServiceWidgetState extends State<BookServiceWidget> {
+  Pet? _selectedPet;
+  DateTime date = DateTime.now();
+  TimeOfDay time = TimeOfDay.now();
 
-//   final FirestoreService _firestoreService = FirestoreService();
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? datePicked = await showDatePicker(
+      context: context,
+      initialDate: date,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       color: Colors.white,
-//       child: Padding(
-//         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             TextFormField(
-//               controller: nameController,
-//               decoration: const InputDecoration(labelText: 'Pet Name'),
-//               validator: (value) {
-//                 if (value == null || value.isEmpty) {
-//                   return 'Please enter pet name';
-//                 }
-//                 return null;
-//               },
-//             ),
-//             const SizedBox(height: 0),
-//             DropdownButtonFormField(
-//               value: _selectedPetType,
-//               items: PetType.values.map((type) {
-//                 return DropdownMenuItem(
-//                   value: type,
-//                   child: Text(type.toString()[0].toUpperCase() +
-//                       type.toString().substring(1)),
-//                 );
-//               }).toList(),
-//               onChanged: (value) {
-//                 setState(() {
-//                   _selectedPetType = value as PetType;
-//                 });
-//               },
-//               decoration: const InputDecoration(labelText: 'Type'),
-//             ),
-//             const SizedBox(height: 0),
-//             TextFormField(
-//               controller: breedController,
-//               decoration: const InputDecoration(labelText: 'Breed'),
-//               validator: (value) {
-//                 if (value == null || value.isEmpty) {
-//                   return 'Please enter pet breed';
-//                 }
-//                 return null;
-//               },
-//             ),
-//             const SizedBox(height: 0),
-//             TextFormField(
-//               controller: ageController,
-//               keyboardType: TextInputType.number,
-//               decoration: const InputDecoration(labelText: 'Age'),
-//               validator: (value) {
-//                 if (value == null || value.isEmpty) {
-//                   return 'Please enter pet age';
-//                 }
-//                 return null;
-//               },
-//             ),
-//             const SizedBox(height: 0),
-//             TextFormField(
-//               controller: aboutController,
-//               decoration: const InputDecoration(labelText: 'About your pet'),
-//             ),
-//             ElevatedButton(
-//               onPressed: () {
-//                 Pet pet = Pet(
-//                   userId: _firestoreService.getCurrentUserID(),
-//                   name: nameController.text,
-//                   type: _selectedPetType,
-//                   breed: breedController.text,
-//                   age: int.parse(ageController.text),
-//                   about: aboutController.text,
-//                 );
-//                 widget.addPet(pet);
-//                 Navigator.pop(context);
-//               },
-//               child: const Text('Add Pet'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+    if (datePicked != null && datePicked != date) {
+      setState(() {
+        date = datePicked;
+      });
+    }
+  }
+
+  void selectTime(BuildContext context) async {
+    final TimeOfDay? timePicked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(date),
+    );
+
+    if (timePicked != null && timePicked != time) {
+      setState(() {
+        date = DateTime(
+          date.year,
+          date.month,
+          date.day,
+          timePicked.hour,
+          timePicked.minute,
+        );
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            DropdownButtonFormField(
+              value: _selectedPet,
+              items: widget.pets.map((pet) {
+                return DropdownMenuItem(
+                  value: pet,
+                  child: Text(pet.name),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedPet = value as Pet;
+                });
+              },
+              decoration: const InputDecoration(labelText: 'Type'),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Date: ${date.toLocal().toString().split(' ')[0]}'),
+                ElevatedButton(
+                  child: const Text('Select Date'),
+                  onPressed: () => selectDate(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                    'Time: ${date.toLocal().toString().split(' ')[1].substring(0, 5)}'),
+                ElevatedButton(
+                  onPressed: () => selectTime(context),
+                  child: const Text('Select Time'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Booking booking = Booking(
+                  pet: _selectedPet!,
+                  service: widget.service,
+                  date: date,
+                );
+                widget.addBooking(booking);
+                Navigator.pop(context);
+              },
+              child: const Text('Make Booking'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

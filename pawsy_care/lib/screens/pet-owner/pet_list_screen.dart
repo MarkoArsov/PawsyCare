@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pawsy_care/models/pet.dart';
-import 'package:pawsy_care/widgets/pets/create_pet_widget.dart';
 import 'package:pawsy_care/widgets/pets/pet_card_widget.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 
@@ -33,13 +31,14 @@ class PetListScreenState extends State<PetListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pawsy Care'),
+      ),
       body: ListView(
         children: pets.map((pet) => PetCardWidget(pet: pet)).toList(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => FirebaseAuth.instance.currentUser != null
-            ? _addPetFunction(context)
-            : _navigateToLogIn(context),
+        onPressed: () => Navigator.pushReplacementNamed(context, '/create-pet'),
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -68,36 +67,5 @@ class PetListScreenState extends State<PetListScreen> {
         },
       ),
     );
-  }
-
-  Future<void> _addPetFunction(BuildContext context) async {
-    return showModalBottomSheet(
-        context: context,
-        builder: (_) {
-          return GestureDetector(
-            onTap: () {},
-            behavior: HitTestBehavior.opaque,
-            child: CreatePetWidget(
-              addPet: addPet,
-            ),
-          );
-        });
-  }
-
-  void addPet(Pet pet) {
-    setState(() {
-      pets.add(pet);
-    });
-    _firestoreService.createPet(pet);
-  }
-
-  void _navigateToLogIn(BuildContext context) {
-    Future.delayed(Duration.zero, () {
-      Navigator.pushReplacementNamed(context, '/login');
-    });
-  }
-
-  Future<void> logOut() async {
-    await FirebaseAuth.instance.signOut();
   }
 }

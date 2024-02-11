@@ -1,4 +1,4 @@
-enum PetType { type, cat, dog }
+enum PetType { cat, dog }
 
 class Pet {
   String userId;
