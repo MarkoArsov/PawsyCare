@@ -23,20 +23,28 @@ class _RoleScreenState extends State<RoleScreen> {
     bool petOwner = await isPetOwner();
 
     if (petOwner) {
-      Navigator.pushReplacementNamed(context, '/pet-list');
+      navigateToPetList();
       return;
     }
 
     bool serviceProvider = await isServiceProvider();
 
     if (serviceProvider) {
-      Navigator.pushReplacementNamed(context, '/service-list');
+      navigateToServiceList();
       return;
     }
 
     setState(() {
       _isLoading = false;
     });
+  }
+
+  void navigateToPetList() {
+    Navigator.pushReplacementNamed(context, '/pet-list');
+  }
+
+  void navigateToServiceList() {
+    Navigator.pushReplacementNamed(context, '/service-list');
   }
 
   Future<bool> isPetOwner() async {
@@ -52,7 +60,9 @@ class _RoleScreenState extends State<RoleScreen> {
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? const CircularProgressIndicator()
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
         : Scaffold(
             appBar: AppBar(
               title: const Text('Choose Role'),

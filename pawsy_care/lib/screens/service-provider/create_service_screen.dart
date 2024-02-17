@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
+import 'package:pawsy_care/models/pawsy_location.dart';
 import 'package:pawsy_care/models/service.dart';
 
 class CreateServiceScreen extends StatefulWidget {
@@ -10,6 +11,10 @@ class CreateServiceScreen extends StatefulWidget {
 }
 
 class CreateServiceScreenState extends State<CreateServiceScreen> {
+  final List<PawsyLocation> locations = [];
+  PawsyLocation _selectedLocation =
+      PawsyLocation(userId: "", name: "", latitude: 0, longitude: 0);
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
@@ -19,6 +24,22 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
   void addService(Service service) {
     _firestoreService.createService(service);
     Navigator.pushReplacementNamed(context, '/service-list');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocations();
+  }
+
+  Future<void> _loadLocations() async {
+    String userId = _firestoreService.getCurrentUserID();
+    List<PawsyLocation> userLocations =
+        await _firestoreService.getLocationsByUser(userId);
+    setState(() {
+      locations.addAll(userLocations);
+      _selectedLocation = locations[0];
+    });
   }
 
   @override
@@ -66,11 +87,36 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
                   return null;
                 },
               ),
+              const SizedBox(height: 10),
+              DropdownButtonFormField(
+                value: _selectedLocation.name,
+                items: locations.map((location) {
+                  return DropdownMenuItem(
+                    value: location.name,
+                    child: Text(location.name),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedLocation = locations
+                        .firstWhere((element) => element.name == value);
+                  });
+                },
+                decoration: const InputDecoration(labelText: 'Type'),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  _navigateToCreateLocation(context);
+                },
+                child: const Text('Add new location'),
+              ),
               const SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () {
                   Service service = Service(
                     userId: _firestoreService.getCurrentUserID(),
+                    location: _selectedLocation,
                     name: nameController.text,
                     description: descriptionController.text,
                     price: double.parse(priceController.text),
@@ -84,5 +130,9 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
         ),
       ),
     );
+  }
+
+  void _navigateToCreateLocation(BuildContext context) {
+    Navigator.pushReplacementNamed(context, '/create-location');
   }
 }

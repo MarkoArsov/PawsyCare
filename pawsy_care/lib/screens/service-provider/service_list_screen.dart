@@ -40,10 +40,22 @@ class ServiceListScreenState extends State<ServiceListScreen> {
             .map((service) => ServiceCardWidget(service: service))
             .toList(),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Navigator.pushReplacementNamed(context, '/create-service'),
-        child: const Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(
+            onPressed: () =>
+                Navigator.pushReplacementNamed(context, '/create-service'),
+            icon: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 16),
+          IconButton(
+            onPressed: () => {
+              Navigator.pushReplacementNamed(context, '/service-provider-map'),
+            },
+            icon: const Icon(Icons.map),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       bottomNavigationBar: BottomNavigationBar(

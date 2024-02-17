@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pawsy_care/models/booking.dart';
+import 'package:pawsy_care/models/pawsy_location.dart';
 import 'package:pawsy_care/models/pet.dart';
 import 'package:pawsy_care/models/service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +20,9 @@ class FirestoreService {
 
   final CollectionReference petOwners =
       FirebaseFirestore.instance.collection('petOwners');
+
+  final CollectionReference locations =
+      FirebaseFirestore.instance.collection('locations');
 
   // GET current user ID
   String getCurrentUserID() {
@@ -65,12 +69,40 @@ class FirestoreService {
   }
 
   // CREATE service
-  Future<void> createService(Service service) {
-    return services.add({
+  Future<void> createService(Service service) async {
+    QuerySnapshot locationSnapshot = await locations
+        .where('name', isEqualTo: service.location.name)
+        .where('userId', isEqualTo: service.location.userId)
+        .get();
+
+    DocumentReference locationRef;
+    if (locationSnapshot.docs.isNotEmpty) {
+      locationRef = locationSnapshot.docs.first.reference;
+    } else {
+      locationRef = await locations.add({
+        'userId': service.location.userId,
+        'name': service.location.name,
+        'latitude': service.location.latitude,
+        'longitude': service.location.longitude
+      });
+    }
+
+    services.add({
       'userId': service.userId,
+      'location': locationRef,
       'name': service.name,
       'description': service.description,
       'price': service.price,
+    });
+  }
+
+  // CREATE service
+  Future<void> createLocation(PawsyLocation location) {
+    return locations.add({
+      'userId': location.userId,
+      'name': location.name,
+      'latitude': location.latitude,
+      'longitude': location.longitude
     });
   }
 
@@ -143,14 +175,24 @@ class FirestoreService {
   Future<List<Service>> getAllServices() async {
     QuerySnapshot querySnapshot = await services.get();
 
-    return querySnapshot.docs.map((doc) {
-      return Service(
+    List<Service> result = [];
+
+    for (var doc in querySnapshot.docs) {
+      DocumentSnapshot locationDoc = await doc['location'].get();
+      result.add(Service(
         userId: doc['userId'],
+        location: PawsyLocation(
+            latitude: locationDoc['latitude'],
+            longitude: locationDoc['longitude'],
+            name: locationDoc['name'],
+            userId: locationDoc['userId']),
         name: doc['name'],
         description: doc['description'],
         price: doc['price'],
-      );
-    }).toList();
+      ));
+    }
+
+    return result;
   }
 
   // GET services by user
@@ -158,12 +200,37 @@ class FirestoreService {
     QuerySnapshot querySnapshot =
         await services.where('userId', isEqualTo: userId).get();
 
-    return querySnapshot.docs.map((doc) {
-      return Service(
+    List<Service> result = [];
+
+    for (var doc in querySnapshot.docs) {
+      DocumentSnapshot locationDoc = await doc['location'].get();
+      result.add(Service(
         userId: doc['userId'],
+        location: PawsyLocation(
+            latitude: locationDoc['latitude'],
+            longitude: locationDoc['longitude'],
+            name: locationDoc['name'],
+            userId: locationDoc['userId']),
         name: doc['name'],
         description: doc['description'],
         price: doc['price'],
+      ));
+    }
+
+    return result;
+  }
+
+  // GET locations by user
+  Future<List<PawsyLocation>> getLocationsByUser(String userId) async {
+    QuerySnapshot querySnapshot =
+        await locations.where('userId', isEqualTo: userId).get();
+
+    return querySnapshot.docs.map((doc) {
+      return PawsyLocation(
+        userId: doc['userId'],
+        name: doc['name'],
+        latitude: doc['latitude'],
+        longitude: doc['longitude'],
       );
     }).toList();
   }
@@ -193,6 +260,7 @@ class FirestoreService {
     return querySnapshot.docs.map((doc) async {
       DocumentSnapshot petDoc = await doc['pet'].get();
       DocumentSnapshot serviceDoc = await doc['service'].get();
+      DocumentSnapshot locationDoc = await serviceDoc['location'].get();
 
       return Booking(
         pet: Pet(
@@ -205,10 +273,15 @@ class FirestoreService {
           about: petDoc['about'],
         ),
         service: Service(
-          userId: serviceDoc['userId'],
-          name: serviceDoc['name'],
-          description: serviceDoc['description'],
-          price: serviceDoc['price'],
+          userId: doc['userId'],
+          location: PawsyLocation(
+              latitude: locationDoc['latitude'],
+              longitude: locationDoc['longitude'],
+              name: locationDoc['name'],
+              userId: locationDoc['userId']),
+          name: doc['name'],
+          description: doc['description'],
+          price: doc['price'],
         ),
         date: doc['date'].toDate(),
       );
