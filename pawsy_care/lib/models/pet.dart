@@ -7,6 +7,7 @@ class Pet {
   String breed;
   int age;
   String about;
+  String imageUrl;
 
   Pet({
     required this.userId,
@@ -15,5 +16,6 @@ class Pet {
     required this.breed,
     required this.age,
     required this.about,
+    required this.imageUrl,
   });
 }

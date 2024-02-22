@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/pet.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class CreatePetScreen extends StatefulWidget {
   const CreatePetScreen({super.key});
@@ -15,6 +19,7 @@ class CreatePetScreenState extends State<CreatePetScreen> {
   final TextEditingController breedController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController aboutController = TextEditingController();
+  String? imageUrl;
 
   final FirestoreService _firestoreService = FirestoreService();
 
@@ -93,6 +98,15 @@ class CreatePetScreenState extends State<CreatePetScreen> {
                 controller: aboutController,
                 decoration: const InputDecoration(labelText: 'About your pet'),
               ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  takePictureAndUpload();
+                },
+                child: IconButton(
+                    onPressed: () => {takePictureAndUpload()},
+                    icon: const Icon(Icons.camera_alt)),
+              ),
               const SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () {
@@ -103,6 +117,7 @@ class CreatePetScreenState extends State<CreatePetScreen> {
                     breed: breedController.text,
                     age: int.parse(ageController.text),
                     about: aboutController.text,
+                    imageUrl: imageUrl!,
                   );
                   addPet(pet);
                 },
@@ -113,5 +128,28 @@ class CreatePetScreenState extends State<CreatePetScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> takePictureAndUpload() async {
+    ImagePicker picker = ImagePicker();
+    XFile? file = await picker.pickImage(source: ImageSource.camera);
+    if (file == null) {
+      return;
+    }
+
+    Reference refRoot = FirebaseStorage.instance.ref();
+    Reference ref = refRoot.child(
+        '${_firestoreService.getCurrentUserID()}/pets/${nameController.text}');
+
+    try {
+      SettableMetadata metadata = SettableMetadata(
+        contentType: 'image/jpeg',
+      );
+      await ref.putFile(File(file.path), metadata);
+      imageUrl = await ref.getDownloadURL();
+    } on Exception catch (e) {
+      imageUrl = "";
+      print("Error uploading image: $e");
+    }
   }
 }

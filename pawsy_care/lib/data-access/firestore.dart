@@ -65,6 +65,7 @@ class FirestoreService {
       'breed': pet.breed,
       'age': pet.age,
       'about': pet.about,
+      'imageUrl': pet.imageUrl,
     });
   }
 
@@ -160,14 +161,14 @@ class FirestoreService {
 
     return querySnapshot.docs.map((doc) {
       return Pet(
-        userId: doc['userId'],
-        name: doc['name'],
-        type:
-            PetType.values.firstWhere((type) => type.toString() == doc['type']),
-        breed: doc['breed'],
-        age: doc['age'],
-        about: doc['about'],
-      );
+          userId: doc['userId'],
+          name: doc['name'],
+          type: PetType.values
+              .firstWhere((type) => type.toString() == doc['type']),
+          breed: doc['breed'],
+          age: doc['age'],
+          about: doc['about'],
+          imageUrl: doc['imageUrl']);
     }).toList();
   }
 
@@ -264,14 +265,14 @@ class FirestoreService {
 
       return Booking(
         pet: Pet(
-          userId: petDoc['userId'],
-          name: petDoc['name'],
-          type: PetType.values
-              .firstWhere((type) => type.toString() == petDoc['type']),
-          breed: petDoc['breed'],
-          age: petDoc['age'],
-          about: petDoc['about'],
-        ),
+            userId: petDoc['userId'],
+            name: petDoc['name'],
+            type: PetType.values
+                .firstWhere((type) => type.toString() == petDoc['type']),
+            breed: petDoc['breed'],
+            age: petDoc['age'],
+            about: petDoc['about'],
+            imageUrl: petDoc['imageUrl']),
         service: Service(
           userId: doc['userId'],
           location: PawsyLocation(
