@@ -59,5 +59,3 @@ Upon launching PawsyCare, users can:
 - View all service provider locations on a map.
 - Manage bookings via a calendar interface.
 - Service providers can register their locations and services.
-
-Thank you for choosing PawsyCare!
