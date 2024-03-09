@@ -1,5 +1,4 @@
 # PawsyCare
----
 
 **Developed by:**
 
