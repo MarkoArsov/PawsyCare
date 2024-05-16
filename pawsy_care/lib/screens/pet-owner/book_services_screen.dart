@@ -1,4 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:pawsy_care/controllers/nav_bar_controller.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/pet.dart';
 import 'package:pawsy_care/models/service.dart';
@@ -17,6 +22,7 @@ class BookServicesScreenState extends State<BookServicesScreen> {
   final List<Service> services = [];
 
   final List<Pet> pets = [];
+  
 
   @override
   void initState() {
@@ -42,6 +48,7 @@ class BookServicesScreenState extends State<BookServicesScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: ListView(
         children: services.map((service) {
@@ -53,31 +60,7 @@ class BookServicesScreenState extends State<BookServicesScreen> {
           );
         }).toList(),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pets),
-            label: 'Pets',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Services',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Bookings',
-          ),
-        ],
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/pet-list');
-          }
-          if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/pet-owner-calendar');
-          }
-        },
-      ),
+      
     );
   }
 

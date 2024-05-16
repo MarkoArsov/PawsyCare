@@ -41,7 +41,7 @@ class RoleScreen extends StatelessWidget {
               onTap: ()
               {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, '/service-list');
+                Navigator.pushNamed(context, '/service-provider');
               },
               child: Container(
                 child: Padding(
@@ -83,7 +83,7 @@ class RoleScreen extends StatelessWidget {
               onTap: ()
               {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, '/pet-list');
+                Navigator.pushNamed(context, '/pet-owner');
               },
               child: Container(
                 child: Padding(

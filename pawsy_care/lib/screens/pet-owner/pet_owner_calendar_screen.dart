@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:pawsy_care/controllers/nav_bar_controller.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/booking.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -29,8 +32,11 @@ class PetOwnerCalendarScreenState extends State<PetOwnerCalendarScreen> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SfCalendar(
         view: CalendarView.month,
@@ -41,31 +47,7 @@ class PetOwnerCalendarScreenState extends State<PetOwnerCalendarScreen> {
           }
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pets),
-            label: 'Pets',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Services',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Bookings',
-          ),
-        ],
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/pet-list');
-          }
-          if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/book-services');
-          }
-        },
-      ),
+
     );
   }
 
