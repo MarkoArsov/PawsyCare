@@ -46,7 +46,18 @@ class BookServicesScreenState extends State<BookServicesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pawsy Care'),
+        backgroundColor: Colors.black,
+        centerTitle: false,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Pawsy Care',
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ],
+        ),
       ),
       body: ListView(
         children: services.map((service) {
@@ -57,31 +68,6 @@ class BookServicesScreenState extends State<BookServicesScreen> {
             child: ServiceCardWidget(service: service),
           );
         }).toList(),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pets),
-            label: 'Pets',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Services',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Bookings',
-          ),
-        ],
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/pet-list');
-          }
-          if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/pet-owner-calendar');
-          }
-        },
       ),
     );
   }

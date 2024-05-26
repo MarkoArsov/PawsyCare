@@ -37,37 +37,9 @@ class _ServiceProviderMapScreenState extends State<ServiceProviderMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : MapWidget(
-              locations: locations, hasMapTap: false, mapTap: (latLng) {}),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, '/service-list');
-        },
-        backgroundColor: Colors.white, 
-        child: const Icon(Icons.list),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pets),
-            label: 'Services',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: 'Calendar',
-          ),
-        ],
-        onTap: (index) {
-          if (index == 1) {
-            Navigator.pushReplacementNamed(
-                context, '/service-provider-calendar');
-          }
-        },
-      ),
-    );
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : MapWidget(
+                locations: locations, hasMapTap: false, mapTap: (latLng) {}));
   }
 }

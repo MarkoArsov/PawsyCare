@@ -85,7 +85,7 @@ class _MapWidgetState extends State<MapWidget> {
           markerId: const MarkerId("mapTap"),
           position: LatLng(position.latitude, position.longitude),
           icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueGreen)));
+              BitmapDescriptor.hueOrange)));
     });
 
     widget.mapTap(position);
@@ -97,7 +97,7 @@ class _MapWidgetState extends State<MapWidget> {
           markerId: MarkerId(location.name),
           position: LatLng(location.latitude, location.longitude),
           icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueGreen)));
+              BitmapDescriptor.hueOrange)));
     }
   }
 

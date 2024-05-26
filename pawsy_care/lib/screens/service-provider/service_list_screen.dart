@@ -33,50 +33,31 @@ class ServiceListScreenState extends State<ServiceListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pawsy Care'),
+        backgroundColor: Colors.black,
+        centerTitle: false,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Pawsy Care',
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ],
+        ),
       ),
       body: ListView(
         children: services
             .map((service) => ServiceCardWidget(service: service))
             .toList(),
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          IconButton(
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, '/create-service'),
-            icon: const Icon(Icons.add),
-          ),
-          const SizedBox(height: 16),
-          IconButton(
-            onPressed: () => {
-              Navigator.pushReplacementNamed(context, '/service-provider-map'),
-            },
-            icon: const Icon(Icons.map),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () =>
+            Navigator.pushReplacementNamed(context, '/create-service'),
+        backgroundColor: Colors.orange,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pets),
-            label: 'Services',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: 'Calendar',
-          ),
-        ],
-        onTap: (index) {
-          if (index == 1) {
-            Navigator.pushReplacementNamed(
-                context, '/service-provider-calendar');
-          }
-        },
-      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

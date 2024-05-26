@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/pawsy_location.dart';
+import 'package:pawsy_care/widgets/shared/input_filed_widget.dart';
 import 'package:pawsy_care/widgets/shared/map_widget.dart';
 
 class CreateLocationScreen extends StatefulWidget {
@@ -39,31 +40,34 @@ class _CreateLocationScreenState extends State<CreateLocationScreen> {
           mapTap: (latLng) {
             onMapTap(latLng);
           }),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: Container(
-              width: 200, // Set your desired width here
-              child: TextFormField(
-                controller: nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
+      floatingActionButton: Container(
+        padding: const EdgeInsets.all(16.0),
+        color: Colors.white, // Set your desired background color here
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 0),
+              child: SizedBox(
+                width: 315,
+                child: InputFieldWidget(
+                    controller: nameController, hintText: "Location Name"),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: FloatingActionButton(
-              onPressed: () {
-                saveLocation();
-              },
-              child: const Icon(Icons.add),
+            Padding(
+              padding: const EdgeInsets.only(right: 6),
+              child: FloatingActionButton(
+                onPressed: () {
+                  saveLocation();
+                },
+                backgroundColor: const Color(0xFF4f6d7a),
+                child: const Icon(Icons.add, color: Colors.white),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

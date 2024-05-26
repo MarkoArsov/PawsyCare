@@ -11,6 +11,10 @@ class ServiceCardWidget extends StatelessWidget {
     return Card(
       elevation: 3,
       margin: const EdgeInsets.all(10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      color: Colors.grey[300], // Slightly darker background color
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 15),
         child: Column(
@@ -18,10 +22,29 @@ class ServiceCardWidget extends StatelessWidget {
           children: [
             Text(
               service.name,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.black87),
             ),
-            Text(service.description, style: const TextStyle(fontSize: 15)),
-            Text("Price: \$${service.price.toStringAsFixed(2)}"),
+            const SizedBox(height: 16),
+            const Text(
+              "Description",
+              style: TextStyle(fontSize: 14, color: Colors.black54),
+            ),
+            Text(
+              service.description,
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              "Price",
+              style: TextStyle(fontSize: 14, color: Colors.black54),
+            ),
+            Text(
+              "\$${service.price.toStringAsFixed(2)}",
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
           ],
         ),
       ),

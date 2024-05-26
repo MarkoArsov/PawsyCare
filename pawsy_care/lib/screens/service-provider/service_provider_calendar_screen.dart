@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/booking.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:intl/intl.dart';
 
 class ServiceProviderCalendarScreen extends StatefulWidget {
   const ServiceProviderCalendarScreen({super.key});
@@ -15,6 +16,8 @@ class ServiceProviderCalendarScreenState
     extends State<ServiceProviderCalendarScreen> {
   final List<Booking> bookings = [];
   final FirestoreService _firestoreService = FirestoreService();
+  final DateFormat dateFormat = DateFormat('MMMM dd, yyyy');
+  final DateFormat timeFormat = DateFormat('HH:mm');
 
   @override
   void initState() {
@@ -35,7 +38,18 @@ class ServiceProviderCalendarScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pawsy Care'),
+        backgroundColor: Colors.black,
+        centerTitle: false,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Pawsy Care',
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ],
+        ),
       ),
       body: SfCalendar(
         view: CalendarView.month,
@@ -43,24 +57,6 @@ class ServiceProviderCalendarScreenState
         onTap: (CalendarTapDetails details) {
           if (details.targetElement == CalendarElement.calendarCell) {
             _handleDateTap(context, details.date!);
-          }
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pets),
-            label: 'Services',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: 'Calendar',
-          ),
-        ],
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/service-list');
           }
         },
       ),
@@ -100,19 +96,32 @@ class ServiceProviderCalendarScreenState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Bookings on ${selectedDate.toLocal()}'),
+          title: Text(dateFormat.format(selectedDate)),
           content: Column(
-            children: bookings
-                .map((booking) => Text(
-                    '${booking.service.name} - ${booking.date.hour}:${booking.date..minute}'))
-                .toList(),
+            mainAxisSize: MainAxisSize.min,
+            children: bookings.map((booking) {
+              return ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(
+                  booking.service.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(timeFormat.format(booking.date)),
+              );
+            }).toList(),
           ),
           actions: [
             TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.orange,
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Close'),
+              child: const Text(
+                'Close',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         );

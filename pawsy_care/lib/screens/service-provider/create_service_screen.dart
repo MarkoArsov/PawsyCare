@@ -23,7 +23,8 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
 
   void addService(Service service) {
     _firestoreService.createService(service);
-    Navigator.pushReplacementNamed(context, '/service-list');
+    Navigator.pop(context);
+    Navigator.pushNamed(context, '/service-provider');
   }
 
   @override
@@ -38,7 +39,9 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
         await _firestoreService.getLocationsByUser(userId);
     setState(() {
       locations.addAll(userLocations);
-      _selectedLocation = locations[0];
+      if (locations.isNotEmpty) {
+        _selectedLocation = locations[0];
+      }
     });
   }
 
@@ -46,7 +49,18 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pawsy Care'),
+        backgroundColor: Colors.black,
+        centerTitle: false,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Pawsy Care',
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ],
+        ),
       ),
       body: Container(
         color: Colors.white,
@@ -55,6 +69,23 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              DropdownButtonFormField(
+                value: _selectedLocation.name,
+                items: locations.map((location) {
+                  return DropdownMenuItem(
+                    value: location.name,
+                    child: Text(location.name),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedLocation = locations
+                        .firstWhere((element) => element.name == value);
+                  });
+                },
+                decoration: const InputDecoration(labelText: 'Location'),
+              ),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: nameController,
                 decoration: const InputDecoration(labelText: 'Service Name'),
@@ -88,23 +119,6 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
                 },
               ),
               const SizedBox(height: 10),
-              DropdownButtonFormField(
-                value: _selectedLocation.name,
-                items: locations.map((location) {
-                  return DropdownMenuItem(
-                    value: location.name,
-                    child: Text(location.name),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedLocation = locations
-                        .firstWhere((element) => element.name == value);
-                  });
-                },
-                decoration: const InputDecoration(labelText: 'Type'),
-              ),
-              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
                   _navigateToCreateLocation(context);
@@ -123,7 +137,7 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
                   );
                   addService(service);
                 },
-                child: const Text('Add Exam'),
+                child: const Text('Add Service'),
               ),
             ],
           ),

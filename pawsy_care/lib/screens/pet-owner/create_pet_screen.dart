@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
@@ -25,14 +24,26 @@ class CreatePetScreenState extends State<CreatePetScreen> {
 
   void addPet(Pet pet) {
     _firestoreService.createPet(pet);
-    Navigator.pushReplacementNamed(context, '/pet-list');
+    Navigator.pop(context);
+    Navigator.pushNamed(context, '/pet-owner');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pawsy Care'),
+        backgroundColor: Colors.black,
+        centerTitle: false,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Pawsy Care',
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ],
+        ),
       ),
       body: Container(
         color: Colors.white,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 
 class RoleScreen extends StatefulWidget {
@@ -40,11 +41,13 @@ class _RoleScreenState extends State<RoleScreen> {
   }
 
   void navigateToPetList() {
-    Navigator.pushReplacementNamed(context, '/pet-list');
+    Navigator.pop(context);
+    Navigator.pushNamed(context, '/pet-owner');
   }
 
   void navigateToServiceList() {
-    Navigator.pushReplacementNamed(context, '/service-list');
+    Navigator.pop(context);
+    Navigator.pushNamed(context, '/service-provider');
   }
 
   Future<bool> isPetOwner() async {
@@ -64,31 +67,95 @@ class _RoleScreenState extends State<RoleScreen> {
             child: CircularProgressIndicator(),
           )
         : Scaffold(
-            appBar: AppBar(
-              title: const Text('Choose Role'),
-            ),
+            backgroundColor: const Color.fromARGB(255, 240, 240, 247),
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
+                  // service provider
+                  GestureDetector(
+                    onTap: () {
                       _firestoreService.addServiceProvider(
                           _firestoreService.getCurrentUserID());
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/service-list');
+                      Navigator.pushNamed(context, '/service-provider');
                     },
-                    child: const Text('Service Provider'),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25.0, vertical: 25.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF4f6d7a),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons
+                                    .content_cut, // Replace with your desired icon
+                                size: 50,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                "service provider",
+                                style: GoogleFonts.quicksand(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
+                  // pet owner
+                  GestureDetector(
+                    onTap: () {
                       _firestoreService
                           .addPetOwner(_firestoreService.getCurrentUserID());
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/pet-list');
+                      Navigator.pushNamed(context, '/pet-owner');
                     },
-                    child: const Text('Pet owner'),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25.0, vertical: 25.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF4f6d7a),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons
+                                    .pets_rounded, // Replace with your desired icon
+                                size: 50,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                "pet owner",
+                                style: GoogleFonts.quicksand(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -274,15 +274,15 @@ class FirestoreService {
             about: petDoc['about'],
             imageUrl: petDoc['imageUrl']),
         service: Service(
-          userId: doc['userId'],
+          userId: serviceDoc['userId'],
           location: PawsyLocation(
               latitude: locationDoc['latitude'],
               longitude: locationDoc['longitude'],
               name: locationDoc['name'],
               userId: locationDoc['userId']),
-          name: doc['name'],
-          description: doc['description'],
-          price: doc['price'],
+          name: serviceDoc['name'],
+          description: serviceDoc['description'],
+          price: serviceDoc['price'],
         ),
         date: doc['date'].toDate(),
       );

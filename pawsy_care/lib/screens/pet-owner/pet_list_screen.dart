@@ -32,39 +32,26 @@ class PetListScreenState extends State<PetListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pawsy Care'),
+        backgroundColor: Colors.black,
+        centerTitle: false,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Pawsy Care',
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ],
+        ),
       ),
       body: ListView(
         children: pets.map((pet) => PetCardWidget(pet: pet)).toList(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushReplacementNamed(context, '/create-pet'),
-        child: const Icon(Icons.add),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pets),
-            label: 'Pets',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Services',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Bookings',
-          ),
-        ],
-        onTap: (index) {
-          if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/book-services');
-          }
-          if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/pet-owner-calendar');
-          }
-        },
+        backgroundColor: const Color(0xFF4f6d7a),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
