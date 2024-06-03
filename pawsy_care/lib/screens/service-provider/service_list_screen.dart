@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/service.dart';
@@ -13,7 +14,7 @@ class ServiceListScreen extends StatefulWidget {
 class ServiceListScreenState extends State<ServiceListScreen> {
   final List<Service> services = [];
   final FirestoreService _firestoreService = FirestoreService();
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   void initState() {
     super.initState();
@@ -33,18 +34,26 @@ class ServiceListScreenState extends State<ServiceListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF4f6d7a),
         centerTitle: false,
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Pawsy Care',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              'PawsyCare',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _auth.signOut();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            icon: const Icon(Icons.logout, color: Colors.white),
+          ),
+        ],
       ),
       body: ListView(
         children: services
@@ -54,7 +63,7 @@ class ServiceListScreenState extends State<ServiceListScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
             Navigator.pushReplacementNamed(context, '/create-service'),
-        backgroundColor: Colors.orange,
+        backgroundColor: const Color(0xFF4f6d7a),
         child: const Icon(Icons.add, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

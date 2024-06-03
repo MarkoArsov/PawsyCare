@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/models/pet.dart';
 import 'package:pawsy_care/widgets/pets/pet_card_widget.dart';
@@ -13,6 +14,7 @@ class PetListScreen extends StatefulWidget {
 class PetListScreenState extends State<PetListScreen> {
   final List<Pet> pets = [];
   final FirestoreService _firestoreService = FirestoreService();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -32,18 +34,25 @@ class PetListScreenState extends State<PetListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF4f6d7a),
         centerTitle: false,
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Pawsy Care',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              'PawsyCare',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            icon: const Icon(Icons.logout, color: Colors.white),
+          ),
+        ],
       ),
       body: ListView(
         children: pets.map((pet) => PetCardWidget(pet: pet)).toList(),

@@ -162,7 +162,7 @@ class AuthScreenState extends State<AuthScreen> {
                                   style: GoogleFonts.quicksand(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
-                                    color: const Color(0xFFDD6E42),
+                                    color: const Color(0xFF4f6d7a),
                                   ),
                                 ),
                               ),
@@ -186,7 +186,7 @@ class AuthScreenState extends State<AuthScreen> {
                                   style: GoogleFonts.quicksand(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
-                                    color: const Color(0xFFDD6E42),
+                                    color: const Color(0xFF4f6d7a),
                                   ),
                                 ),
                               ),

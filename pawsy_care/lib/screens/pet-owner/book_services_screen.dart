@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/booking.dart';
@@ -15,6 +16,8 @@ class BookServicesScreen extends StatefulWidget {
 
 class BookServicesScreenState extends State<BookServicesScreen> {
   final FirestoreService _firestoreService = FirestoreService();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final List<Service> services = [];
 
@@ -46,18 +49,26 @@ class BookServicesScreenState extends State<BookServicesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF4f6d7a),
         centerTitle: false,
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Pawsy Care',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              'PawsyCare',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _auth.signOut();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            icon: const Icon(Icons.logout, color: Colors.white),
+          ),
+        ],
       ),
       body: ListView(
         children: services.map((service) {

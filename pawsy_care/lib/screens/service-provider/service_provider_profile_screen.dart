@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 
@@ -12,7 +13,7 @@ class ServiceProviderProfileScreen extends StatefulWidget {
 class _ServiceProviderProfileScreenState
     extends State<ServiceProviderProfileScreen> {
   final FirestoreService _firestoreService = FirestoreService();
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   var isLoading = true;
 
   String userid = '';
@@ -35,18 +36,26 @@ class _ServiceProviderProfileScreenState
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: const Color(0xFF4f6d7a),
           centerTitle: false,
           title: const Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                'Pawsy Care',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                'PawsyCare',
+                style: TextStyle(color: Colors.white),
               ),
             ],
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                _auth.signOut();
+                Navigator.pushReplacementNamed(context, '/login');
+              },
+              icon: const Icon(Icons.logout, color: Colors.white),
+            ),
+          ],
         ),
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -57,7 +66,7 @@ class _ServiceProviderProfileScreenState
                     Icon(
                       Icons.schedule,
                       size: 180,
-                      color: Colors.orange,
+                      color: Color(0xFF4f6d7a),
                     ),
                     SizedBox(height: 5),
                     Text(

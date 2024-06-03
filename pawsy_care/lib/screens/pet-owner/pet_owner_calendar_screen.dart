@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/booking.dart';
@@ -16,6 +17,7 @@ class PetOwnerCalendarScreenState extends State<PetOwnerCalendarScreen> {
   final FirestoreService _firestoreService = FirestoreService();
   final DateFormat dateFormat = DateFormat('MMMM dd, yyyy');
   final DateFormat timeFormat = DateFormat('HH:mm');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -36,18 +38,26 @@ class PetOwnerCalendarScreenState extends State<PetOwnerCalendarScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF4f6d7a),
         centerTitle: false,
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Pawsy Care',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              'PawsyCare',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _auth.signOut();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            icon: const Icon(Icons.logout, color: Colors.white),
+          ),
+        ],
       ),
       body: SfCalendar(
         view: CalendarView.month,

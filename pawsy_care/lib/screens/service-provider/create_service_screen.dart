@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/pawsy_location.dart';
@@ -18,11 +19,11 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = FirestoreService();
 
-  void addService(Service service) {
-    _firestoreService.createService(service);
+  void addService(Service service) async {
+    await _firestoreService.createService(service);
     Navigator.pop(context);
     Navigator.pushNamed(context, '/service-provider');
   }
@@ -48,102 +49,194 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        centerTitle: false,
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Pawsy Care',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-      body: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF4f6d7a),
+          centerTitle: false,
+          title: const Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              DropdownButtonFormField(
-                value: _selectedLocation.name,
-                items: locations.map((location) {
-                  return DropdownMenuItem(
-                    value: location.name,
-                    child: Text(location.name),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedLocation = locations
-                        .firstWhere((element) => element.name == value);
-                  });
-                },
-                decoration: const InputDecoration(labelText: 'Location'),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: nameController,
-                decoration: const InputDecoration(labelText: 'Service Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter service name';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                maxLines: 3,
-                controller: descriptionController,
-                decoration:
-                    const InputDecoration(labelText: "Service Description"),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: priceController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Price',
-                  suffixText: '€',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter service price';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  _navigateToCreateLocation(context);
-                },
-                child: const Text('Add new location'),
-              ),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                onPressed: () {
-                  Service service = Service(
-                    userId: _firestoreService.getCurrentUserID(),
-                    location: _selectedLocation,
-                    name: nameController.text,
-                    description: descriptionController.text,
-                    price: double.parse(priceController.text),
-                  );
-                  addService(service);
-                },
-                child: const Text('Add Service'),
+              Text(
+                'PawsyCare',
+                style: TextStyle(color: Colors.white),
               ),
             ],
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                _auth.signOut();
+                Navigator.pushReplacementNamed(context, '/login');
+              },
+              icon: const Icon(Icons.logout, color: Colors.white),
+            ),
+          ],
         ),
-      ),
-    );
+        body: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: DropdownButtonFormField<String>(
+                          value: _selectedLocation.name,
+                          items: locations.map((location) {
+                            return DropdownMenuItem(
+                              value: location.name,
+                              child: Text(location.name),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedLocation = locations.firstWhere(
+                                  (element) => element.name == value);
+                            });
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Location',
+                            labelStyle:
+                                const TextStyle(color: Color(0xFF4f6d7a)),
+                            filled: true,
+                            fillColor: Colors.grey[200],
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF4f6d7a)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF4f6d7a)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      IconButton(
+                        onPressed: () {
+                          _navigateToCreateLocation(context);
+                        },
+                        icon: const Icon(Icons.add, color: Color(0xFF4f6d7a)),
+                        iconSize: 30,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  TextFormField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Service Name',
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      labelStyle: const TextStyle(color: Color(0xFF4f6d7a)),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter service name';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  TextFormField(
+                    controller: priceController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Price',
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      suffixText: '€',
+                      labelStyle: const TextStyle(color: Color(0xFF4f6d7a)),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter service price';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  TextFormField(
+                    maxLines: 3,
+                    controller: descriptionController,
+                    decoration: InputDecoration(
+                      labelText: "Service Description",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      labelStyle: const TextStyle(color: Color(0xFF4f6d7a)),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 300),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, '/service-provider');
+                        },
+                        child: const Text('Cancel',
+                            style: TextStyle(color: Colors.black)),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Service service = Service(
+                            userId: _firestoreService.getCurrentUserID(),
+                            location: _selectedLocation,
+                            name: nameController.text,
+                            description: descriptionController.text,
+                            price: double.parse(priceController.text),
+                          );
+                          addService(service);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color(0xFF4f6d7a), // Background color
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 33,
+                            vertical: 14,
+                          ), // Increase the size
+                        ),
+                        child: const Text('Add Service',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 
   void _navigateToCreateLocation(BuildContext context) {

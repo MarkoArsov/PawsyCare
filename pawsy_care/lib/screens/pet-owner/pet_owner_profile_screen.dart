@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 
 class PetOwnerProfileScreen extends StatefulWidget {
@@ -10,6 +12,7 @@ class PetOwnerProfileScreen extends StatefulWidget {
 
 class _PetOwnerProfileScreenState extends State<PetOwnerProfileScreen> {
   final FirestoreService _firestoreService = FirestoreService();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   var isLoading = true;
 
@@ -33,18 +36,26 @@ class _PetOwnerProfileScreenState extends State<PetOwnerProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFF4f6d7a),
         centerTitle: false,
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Pawsy Care',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              'PawsyCare',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _auth.signOut();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            icon: const Icon(Icons.logout, color: Colors.white),
+          ),
+        ],
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())

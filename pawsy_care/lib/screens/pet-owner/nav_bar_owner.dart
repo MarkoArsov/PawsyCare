@@ -12,15 +12,15 @@ class NavBarOwner extends StatelessWidget {
 
     return Scaffold(
         bottomNavigationBar: Container(
-          color: Colors.black,
+          color: const Color(0xFF4f6d7a),
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
             child: GNav(
-              backgroundColor: Colors.black,
+              backgroundColor: const Color(0xFF4f6d7a),
               color: Colors.white,
-              activeColor: Colors.white,
-              tabBackgroundColor: const Color(0xFF4f6d7a),
+              activeColor: const Color(0xFF4f6d7a),
+              tabBackgroundColor: Colors.grey[200]!,
               gap: 8,
               onTabChange: (index) {
                 navBarController.selectedIndex.value = index;

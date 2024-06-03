@@ -10,12 +10,12 @@ class PetCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 3,
       margin: const EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      color: Colors.grey[400],
-      elevation: 6,
+      color: Colors.grey[300],
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
@@ -52,7 +52,7 @@ class PetCardWidget extends StatelessWidget {
                     width: 100,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: Colors.black,
+                      color: const Color(0xFF4f6d7a),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
