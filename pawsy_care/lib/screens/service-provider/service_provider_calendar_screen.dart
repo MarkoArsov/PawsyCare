@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/booking.dart';
@@ -19,7 +18,6 @@ class ServiceProviderCalendarScreenState
   final FirestoreService _firestoreService = FirestoreService();
   final DateFormat dateFormat = DateFormat('MMMM dd, yyyy');
   final DateFormat timeFormat = DateFormat('HH:mm');
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   void initState() {
     super.initState();

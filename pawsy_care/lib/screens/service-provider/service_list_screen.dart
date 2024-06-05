@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/service.dart';
@@ -14,7 +13,6 @@ class ServiceListScreen extends StatefulWidget {
 class ServiceListScreenState extends State<ServiceListScreen> {
   final List<Service> services = [];
   final FirestoreService _firestoreService = FirestoreService();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   void initState() {
     super.initState();

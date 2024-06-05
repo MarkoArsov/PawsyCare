@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
 import 'package:pawsy_care/models/pawsy_location.dart';
@@ -19,7 +18,6 @@ class CreateServiceScreenState extends State<CreateServiceScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = FirestoreService();
 
   void addService(Service service) async {
