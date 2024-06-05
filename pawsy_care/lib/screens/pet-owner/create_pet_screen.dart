@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pawsy_care/data-access/firestore.dart';
@@ -20,8 +19,6 @@ class CreatePetScreenState extends State<CreatePetScreen> {
   final TextEditingController ageController = TextEditingController();
   final TextEditingController aboutController = TextEditingController();
   String? imageUrl;
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = FirestoreService();
 
   void addPet(Pet pet) {
@@ -33,224 +30,200 @@ class CreatePetScreenState extends State<CreatePetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF4f6d7a),
-          centerTitle: false,
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                'PawsyCare',
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                _auth.signOut();
-                Navigator.pushReplacementNamed(context, '/login');
-              },
-              icon: const Icon(Icons.logout, color: Colors.white),
-            ),
-          ],
-        ),
         body: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 15),
-                  TextFormField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Pet Name',
-                      labelStyle: const TextStyle(color: Colors.black),
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
-                      ),
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 40),
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'Pet Name',
+                  labelStyle: const TextStyle(color: Colors.black),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter pet name';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 15),
+              DropdownButtonFormField<PetType>(
+                value: _selectedPetType,
+                items: PetType.values.map((type) {
+                  return DropdownMenuItem(
+                    value: type,
+                    child: Text(
+                      type.toString().split('.').last[0].toUpperCase() +
+                          type.toString().split('.').last.substring(1),
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter pet name';
-                      }
-                      return null;
-                    },
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedPetType = value!;
+                  });
+                },
+                decoration: InputDecoration(
+                  labelText: 'Type',
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  labelStyle: const TextStyle(color: Colors.black),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
                   ),
-                  const SizedBox(height: 15),
-                  DropdownButtonFormField<PetType>(
-                    value: _selectedPetType,
-                    items: PetType.values.map((type) {
-                      return DropdownMenuItem(
-                        value: type,
-                        child: Text(
-                          type.toString().split('.').last[0].toUpperCase() +
-                              type.toString().split('.').last.substring(1),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedPetType = value!;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Type',
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      labelStyle: const TextStyle(color: Colors.black),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
-                      ),
-                    ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
                   ),
-                  const SizedBox(height: 15),
-                  TextFormField(
-                    controller: breedController,
-                    decoration: InputDecoration(
-                      labelText: 'Breed',
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      labelStyle: const TextStyle(color: Colors.black),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter pet breed';
-                      }
-                      return null;
-                    },
+                ),
+              ),
+              const SizedBox(height: 15),
+              TextFormField(
+                controller: breedController,
+                decoration: InputDecoration(
+                  labelText: 'Breed',
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  labelStyle: const TextStyle(color: Colors.black),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
                   ),
-                  const SizedBox(height: 15),
-                  TextFormField(
-                    controller: ageController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Age',
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      labelStyle: const TextStyle(color: Colors.black),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter pet age';
-                      }
-                      return null;
-                    },
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
                   ),
-                  const SizedBox(height: 15),
-                  TextFormField(
-                    controller: aboutController,
-                    maxLines: 4,
-                    decoration: InputDecoration(
-                      labelText: 'About your pet',
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      labelStyle: const TextStyle(color: Colors.black),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
-                      ),
-                    ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter pet breed';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 15),
+              TextFormField(
+                controller: ageController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Age',
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  labelStyle: const TextStyle(color: Colors.black),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
                   ),
-                  const SizedBox(height: 40),
-                  Center(
-                    child: imageUrl == null
-                        ? ElevatedButton(
-                            onPressed: takePictureAndUpload,
-                            style: ElevatedButton.styleFrom(
-                              shape: const CircleBorder(),
-                              padding:
-                                  const EdgeInsets.all(20), // increase the size
-                            ),
-                            child: const Icon(
-                              Icons.camera_alt,
-                              size: 30,
-                              color: Color(0xFF4f6d7a),
-                            ),
-                          )
-                        : Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            clipBehavior: Clip.hardEdge,
-                            width: 140,
-                            height: 140,
-                            child: Image.network(
-                              imageUrl!,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
                   ),
-                  const SizedBox(height: 100),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context,
-                              '/pet-owner'); // Assuming this is how you cancel
-                        },
-                        child: const Text('Cancel',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          addPetFunction();
-                        },
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter pet age';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 15),
+              TextFormField(
+                controller: aboutController,
+                maxLines: 4,
+                decoration: InputDecoration(
+                  labelText: 'About your pet',
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  labelStyle: const TextStyle(color: Colors.black),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF4f6d7a)),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              Center(
+                child: imageUrl == null
+                    ? ElevatedButton(
+                        onPressed: takePictureAndUpload,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color(0xFF4f6d7a), // Background color
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 33,
-                              vertical: 14), // Increase the size
+                          shape: const CircleBorder(),
+                          padding:
+                              const EdgeInsets.all(20), // increase the size
                         ),
-                        child: const Text('Add Pet',
-                            style: TextStyle(color: Colors.white)),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          size: 30,
+                          color: Color(0xFF4f6d7a),
+                        ),
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        width: 140,
+                        height: 140,
+                        child: Image.network(
+                          imageUrl!,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ],
+              ),
+              const SizedBox(height: 152),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/pet-owner');
+                    },
+                    child: const Text('Cancel',
+                        style: TextStyle(color: Colors.black)),
                   ),
-                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      addPetFunction();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          const Color(0xFF4f6d7a), // Background color
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 33, vertical: 14), // Increase the size
+                    ),
+                    child: const Text('Add Pet',
+                        style: TextStyle(color: Colors.white)),
+                  ),
                 ],
               ),
-            ),
+              const SizedBox(height: 20),
+            ],
           ),
-        ));
+        ),
+      ),
+    ));
   }
 
   void addPetFunction() {

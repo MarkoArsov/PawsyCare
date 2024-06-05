@@ -236,6 +236,20 @@ class FirestoreService {
     }).toList();
   }
 
+  // GET all locations by user
+  Future<List<PawsyLocation>> getAllLocations() async {
+    QuerySnapshot querySnapshot = await locations.get();
+
+    return querySnapshot.docs.map((doc) {
+      return PawsyLocation(
+        userId: doc['userId'],
+        name: doc['name'],
+        latitude: doc['latitude'],
+        longitude: doc['longitude'],
+      );
+    }).toList();
+  }
+
   // GET bookings by pet user
   Future<List<Booking>> getBookingsByPetUser(String userId) async {
     QuerySnapshot querySnapshot =

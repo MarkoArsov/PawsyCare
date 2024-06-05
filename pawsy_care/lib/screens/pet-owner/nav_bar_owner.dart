@@ -28,9 +28,9 @@ class NavBarOwner extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               tabs: const [
                 GButton(icon: Icons.pets, text: 'Pets'),
-                GButton(icon: Icons.home, text: 'Services'),
+                GButton(icon: Icons.book, text: 'Services'),
+                GButton(icon: Icons.map, text: 'Locations'),
                 GButton(icon: Icons.calendar_month, text: 'Bookings'),
-                GButton(icon: Icons.person, text: 'Account'),
               ],
             ),
           ),

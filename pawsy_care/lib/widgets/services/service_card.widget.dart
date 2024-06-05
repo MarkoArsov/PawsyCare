@@ -47,6 +47,15 @@ class ServiceCardWidget extends StatelessWidget {
                   "\$${service.price.toStringAsFixed(2)}",
                   style: const TextStyle(fontSize: 16, color: Colors.black),
                 ),
+                const SizedBox(height: 16),
+                const Text(
+                  "Location",
+                  style: TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+                Text(
+                  service.location.name,
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
+                ),
               ],
             ),
             const Positioned(

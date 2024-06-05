@@ -33,28 +33,6 @@ class ServiceListScreenState extends State<ServiceListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF4f6d7a),
-        centerTitle: false,
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'PawsyCare',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              _auth.signOut();
-              Navigator.pushReplacementNamed(context, '/login');
-            },
-            icon: const Icon(Icons.logout, color: Colors.white),
-          ),
-        ],
-      ),
       body: ListView(
         children: services
             .map((service) => ServiceCardWidget(service: service))

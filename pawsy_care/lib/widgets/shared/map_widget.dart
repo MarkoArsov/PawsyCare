@@ -49,15 +49,15 @@ class _MapWidgetState extends State<MapWidget> {
       markers.add(Marker(
           markerId: const MarkerId("initialPosition"),
           position: currentLocation!,
-          icon:
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue)));
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          infoWindow: const InfoWindow(title: "Your Location")));
       return GoogleMap(
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
         onTap: _onMapTapped,
         initialCameraPosition:
-            const CameraPosition(target: _cameraPosition, zoom: 15),
+            const CameraPosition(target: _cameraPosition, zoom: 14),
         markers: markers,
       );
     }
@@ -70,7 +70,7 @@ class _MapWidgetState extends State<MapWidget> {
   Future<void> cametaToPosition(LatLng position) async {
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: position, zoom: 15)));
+        CameraPosition(target: position, zoom: 14)));
   }
 
   void _onMapTapped(LatLng position) {
@@ -84,8 +84,12 @@ class _MapWidgetState extends State<MapWidget> {
       markers.add(Marker(
           markerId: const MarkerId("mapTap"),
           position: LatLng(position.latitude, position.longitude),
-          icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueOrange)));
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+          infoWindow: InfoWindow(
+            title: "Tapped Location",
+            snippet: "${position.latitude}, ${position.longitude}",
+          )));
     });
 
     widget.mapTap(position);
@@ -96,8 +100,12 @@ class _MapWidgetState extends State<MapWidget> {
       markers.add(Marker(
           markerId: MarkerId(location.name),
           position: LatLng(location.latitude, location.longitude),
-          icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueOrange)));
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+          infoWindow: InfoWindow(
+            title: location.name,
+            snippet: "${location.latitude}, ${location.longitude}",
+          )));
     }
   }
 

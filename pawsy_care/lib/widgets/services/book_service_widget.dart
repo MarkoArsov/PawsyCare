@@ -99,52 +99,83 @@ class BookServiceWidgetState extends State<BookServiceWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Date: ${date.toLocal().toString().split(' ')[0]}'),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Date',
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                    Text(
+                      date.toLocal().toString().split(' ')[0],
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ],
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4f6d7a),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 33, vertical: 14)),
-                  child: const Text('Select Date',
-                      style: TextStyle(color: Colors.white)),
+                    backgroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 10),
+                    side: const BorderSide(color: Color(0xFF4f6d7a), width: 1),
+                  ),
                   onPressed: () => selectDate(context),
+                  child: const Text(
+                    'Select Date',
+                    style: TextStyle(color: Color(0xFF4f6d7a)),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                    'Time: ${date.toLocal().toString().split(' ')[1].substring(0, 5)}'),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Time',
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                    Text(
+                      date.toLocal().toString().split(' ')[1].substring(0, 5),
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ],
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4f6d7a),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 33, vertical: 14)),
+                    backgroundColor: Colors.white,
+                    side: const BorderSide(color: Color(0xFF4f6d7a), width: 1),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 10),
+                  ),
                   onPressed: () => selectTime(context),
                   child: const Text('Select Time',
-                      style: TextStyle(color: Colors.white)),
+                      style: TextStyle(color: Color(0xFF4f6d7a))),
                 ),
               ],
             ),
-            const SizedBox(height: 210),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4f6d7a),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 33, vertical: 14)),
-              onPressed: () {
-                Booking booking = Booking(
-                  pet: _selectedPet!,
-                  service: widget.service,
-                  date: date,
-                );
-                widget.addBooking(booking);
-                Navigator.pop(context);
-              },
-              child: const Text('Make Booking',
-                  style: TextStyle(color: Colors.white)),
+            const SizedBox(height: 170),
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF4f6d7a),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 33, vertical: 14)),
+                onPressed: () {
+                  Booking booking = Booking(
+                    pet: _selectedPet!,
+                    service: widget.service,
+                    date: date,
+                  );
+                  widget.addBooking(booking);
+                  Navigator.pop(context);
+                },
+                child: const Text('Make Booking',
+                    style: TextStyle(color: Colors.white)),
+              ),
             ),
           ],
         ),

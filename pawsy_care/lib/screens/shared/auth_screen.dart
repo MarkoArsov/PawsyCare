@@ -158,11 +158,11 @@ class AuthScreenState extends State<AuthScreen> {
                               TextButton(
                                 onPressed: _navigateToRegister,
                                 child: Text(
-                                  "Register here.",
+                                  "Register here",
                                   style: GoogleFonts.quicksand(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF4f6d7a),
+                                    color: Colors.orange,
                                   ),
                                 ),
                               ),
@@ -182,11 +182,11 @@ class AuthScreenState extends State<AuthScreen> {
                               TextButton(
                                 onPressed: _navigateToLogin,
                                 child: Text(
-                                  "Sign in.",
+                                  "Sign in",
                                   style: GoogleFonts.quicksand(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF4f6d7a),
+                                    color: Colors.orange,
                                   ),
                                 ),
                               ),

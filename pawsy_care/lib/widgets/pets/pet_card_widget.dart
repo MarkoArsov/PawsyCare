@@ -49,7 +49,7 @@ class PetCardWidget extends StatelessWidget {
                   top: 0,
                   left: 0,
                   child: Container(
-                    width: 100,
+                    width: 70,
                     height: 30,
                     decoration: BoxDecoration(
                       color: const Color(0xFF4f6d7a),
@@ -59,10 +59,9 @@ class PetCardWidget extends StatelessWidget {
                       child: Text(
                         pet.type.toString().split('.').last.capitalize!,
                         style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: 13,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
